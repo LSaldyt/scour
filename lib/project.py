@@ -1,6 +1,8 @@
 from .search import search
 from .database import Database
 
+import pickle
+
 class Project:
     def __init__(self):
         self.topics   = dict()
@@ -40,6 +42,24 @@ class Project:
             print(url)
         self.database.add(urls, *self.topicChain)
 
+    def save(self, filename):
+        '''
+        Create a backup of the project in the specified file
+        Arguments: [filename (str)]
+        '''
+        with open(filename, 'wb') as outfile:
+            pickle.dump(self, outfile)
+
+    def load(self, filename):
+        '''
+        Load from a saved project file
+        Overwrites current database
+        Arguments: [filename (str)]
+        '''
+        with open(filename, 'rb') as infile:
+            project = pickle.load(infile)
+            self.database = project.database # TODO: Merge databases
+
     def purge(self):
         '''
         DANGEROUS:
@@ -47,3 +67,4 @@ class Project:
         Arguments: None
         '''
         self.database = Database()
+
