@@ -5,7 +5,6 @@ import pickle
 
 class Project:
     def __init__(self):
-        self.topics     = dict()
         self.database   = Database()
         self.topicChain = []
 
@@ -27,6 +26,7 @@ class Project:
         Arguments: [topic (str)]
         '''
         self.topicChain.append(topic)
+        self.database.add_topics(self.topicChain)
         print('Beginning the topic {}'.format(topic))
 
     def end(self):
@@ -34,7 +34,7 @@ class Project:
         End the current topic or subtopic
         Arguments: None
         '''
-        if len(topicChain) > 0:
+        if len(self.topicChain) > 0:
             topic = self.topicChain.pop()
             print('Exiting the topic {}'.format(topic))
         else:
@@ -48,6 +48,20 @@ class Project:
         print('Collecting sources for the topic: {}'.format(self.__get_topic_str__()))
         result = collect(*args, stop=stop)
         self.database.add(result, *self.topicChain)
+
+    def show(self):
+        '''
+        Show the current database topic tree
+        Arguments: None
+        '''
+        self.database.show_tree()
+
+    def review(self, *topics):
+        '''
+        Review a particular topic in the project database
+        Arguments: [*chain (str(s))]
+        '''
+        self.database.review(*topics)
 
     def save(self, filename):
         '''
@@ -77,4 +91,4 @@ class Project:
         '''
         print('Purging all collected data')
         self.database = Database()
-
+        del self.topicChain[:]
