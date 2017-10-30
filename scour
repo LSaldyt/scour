@@ -2,8 +2,9 @@
 import argparse
 import sys
 import pickle
+import inspect
 
-from project import Project
+from lib import Project
 
 '''
 Copied usage notes
@@ -35,18 +36,34 @@ def get_site_restriction(filename):
     return '({})'.format(' OR '.join(sites))
 '''
 
+
+def get_method_docs(obj):
+    members = [(func, getattr(obj, func)) for func in dir(obj) if callable(getattr(obj, func)) and not func.startswith("__")]
+    return [(name, func.__doc__) for name, func in members]
+
+def get_cli_docs():
+    methodDocs = get_method_docs(Project)
+    subcommands = '    ' + '\n    '.join(name for name, doc in methodDocs)
+    format_doc  = lambda doc : '\n        '.join(line for line in doc.split('\n')) if doc is not None else ''
+    docs        = '    ' + '\n    '.join('{}:\n        {}'.format(name, format_doc(doc)) for name, doc in methodDocs)
+    return subcommands, docs
+
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("subcommand", type=str,
-                        help="Select a subcommand of scour to run")
+    subcommands, docs = get_cli_docs()
+
+    parser = argparse.ArgumentParser(description=docs, 
+                formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('subcommand', type=str,
+            help='Select a subcommand of scour to run: \n' + subcommands)
     parser.add_argument('subargs', type=str, nargs='*',
-                        help='Sub arguments fed into a sub command')
+                        help='Potentially optional sub-arguments fed into a subcommand')
     args = parser.parse_args()
+
 
     try:
         with open('.project.pkl', 'rb') as infile:
             project = pickle.load(infile)
-    except:
+    finally:
         project = Project()
 
     project_command = getattr(project, args.subcommand)

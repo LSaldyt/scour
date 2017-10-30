@@ -1,4 +1,4 @@
-from tag import Tag
+from .tag import Tag
 
 class Database:
     def __init__(self):
