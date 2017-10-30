@@ -26,6 +26,7 @@ class Project:
     def end(self):
         '''
         End the current topic or subtopic
+        Arguments: None
         '''
         self.topicChain.pop()
 
@@ -38,3 +39,11 @@ class Project:
         for url in urls:
             print(url)
         self.database.add(urls, *self.topicChain)
+
+    def purge(self):
+        '''
+        DANGEROUS:
+        Purge all collected data!!!!!!
+        Arguments: None
+        '''
+        self.database = Database()

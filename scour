@@ -63,7 +63,7 @@ def main():
     try:
         with open('.project.pkl', 'rb') as infile:
             project = pickle.load(infile)
-    finally:
+    except FileNotFoundError:
         project = Project()
 
     project_command = getattr(project, args.subcommand)
