@@ -1,21 +1,24 @@
-from .search import search
+from .collect  import collect
 from .database import Database
 
 import pickle
 
 class Project:
     def __init__(self):
-        self.topics   = dict()
-        self.database = Database()
-
+        self.topics     = dict()
+        self.database   = Database()
         self.topicChain = []
 
-    def switch(self, topic):
+    def __get_topic_str__(self):
+        return ':'.join(self.topicChain)
+
+    def switch(self, *chain):
         '''
-        Change to topic to [topic]
-        Arguments: [topic (str)]
+        Change to topic to [*chain]
+        Arguments: [*chain (str(s))]
         '''
-        self.topicChain = [topic]
+        self.topicChain = chain
+        print('Changed topic to :{}'.format(self.__get_topic_str__()))
 
     def begin(self, topic):
         '''
@@ -24,29 +27,34 @@ class Project:
         Arguments: [topic (str)]
         '''
         self.topicChain.append(topic)
+        print('Beginning the topic {}'.format(topic))
 
     def end(self):
         '''
         End the current topic or subtopic
         Arguments: None
         '''
-        self.topicChain.pop()
+        if len(topicChain) > 0:
+            topic = self.topicChain.pop()
+            print('Exiting the topic {}'.format(topic))
+        else:
+            print('No topic to exit')
 
     def collect(self, *args, stop=10):
         '''
         Collect urls based on a google search with [args]
         Arguments: [*args] # A traditional google search
         '''
-        urls = search(*args, stop=stop)
-        for url in urls:
-            print(url)
-        self.database.add(urls, *self.topicChain)
+        print('Collecting sources for the topic: {}'.format(self.__get_topic_str__()))
+        result = collect(*args, stop=stop)
+        self.database.add(result, *self.topicChain)
 
     def save(self, filename):
         '''
         Create a backup of the project in the specified file
         Arguments: [filename (str)]
         '''
+        print('Saving project to file: {}'.format(filename))
         with open(filename, 'wb') as outfile:
             pickle.dump(self, outfile)
 
@@ -56,6 +64,7 @@ class Project:
         Overwrites current database
         Arguments: [filename (str)]
         '''
+        print('Loading database from file: {}'.format(filename))
         with open(filename, 'rb') as infile:
             project = pickle.load(infile)
             self.database = project.database # TODO: Merge databases
@@ -66,5 +75,6 @@ class Project:
         Purge all collected data!!!!!!
         Arguments: None
         '''
+        print('Purging all collected data')
         self.database = Database()
 

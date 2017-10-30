@@ -27,13 +27,6 @@ scour end storage
 
 scour end thesis
 
-def get_site_restriction(filename):
-    sites = []
-    with open(filename, 'r') as infile:
-        for line in infile:
-            sites.append('site:{}'.format(line.replace('\n', '')))
-    assert len(sites) > 0, 'The file {} is empty'.format(filename)
-    return '({})'.format(' OR '.join(sites))
 '''
 
 
