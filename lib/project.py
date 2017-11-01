@@ -54,6 +54,7 @@ class Project:
         Show the current database topic tree
         Arguments: None
         '''
+        print('Current topic: {}'.format(self.__get_topic_str__()))
         self.database.show_tree()
 
     def review(self, *topics):

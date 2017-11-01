@@ -51,7 +51,7 @@ class Database:
             if '__tags__' in level:
                 tags = level['__tags__']
                 for tag in tags:
-                    urls = self.universal[tag]
-                    pprint(urls)
+                    result = self.universal[tag]
+                    print(result)
             self.recursive_review(v)
 
