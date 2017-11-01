@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-import argparse
 import sys
 import pickle
-import inspect
 import os.path
 
 from lib import Project
@@ -42,17 +40,16 @@ def get_cli_docs():
     docs        = '    ' + '\n    '.join('{}:\n        {}'.format(name, format_doc(doc)) for name, doc in methodDocs)
     return subcommands, docs
 
-def main():
+def main(args):
     subcommands, docs = get_cli_docs()
 
-    parser = argparse.ArgumentParser(description=docs, 
-                formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('subcommand', type=str,
-            help='Select a subcommand of scour to run: \n' + subcommands)
-    parser.add_argument('subargs', type=str, nargs='*',
-                        help='Potentially optional sub-arguments fed into a subcommand')
-    args = parser.parse_args()
+    if '-h' in args or '--help' in args:
+        print('Select a subcommand of scour to run: \n' + docs)
+        return 0
 
+    assert len(args) > 0, 'Require at least one argument to run'
+
+    subcommand, *subargs = args
 
     dirname = os.path.dirname(os.path.realpath(__file__))
     filename = dirname + '/.project.pkl'
@@ -62,8 +59,10 @@ def main():
     except FileNotFoundError:
         project = Project()
 
-    project_command = getattr(project, args.subcommand)
-    project_command(*args.subargs)
+    if not hasattr(project, subcommand):
+        raise AttributeError('Invalid subcommand: {}'.format(subcommand))
+    project_command = getattr(project, subcommand)
+    project_command(*subargs)
 
     with open(filename, 'wb') as outfile:
         pickle.dump(project, outfile)
@@ -71,4 +70,4 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
