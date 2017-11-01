@@ -3,6 +3,7 @@ import argparse
 import sys
 import pickle
 import inspect
+import os.path
 
 from lib import Project
 
@@ -53,8 +54,10 @@ def main():
     args = parser.parse_args()
 
 
+    dirname = os.path.dirname(os.path.realpath(__file__))
+    filename = dirname + '/.project.pkl'
     try:
-        with open('.project.pkl', 'rb') as infile:
+        with open(filename, 'rb') as infile:
             project = pickle.load(infile)
     except FileNotFoundError:
         project = Project()
@@ -62,7 +65,7 @@ def main():
     project_command = getattr(project, args.subcommand)
     project_command(*args.subargs)
 
-    with open('.project.pkl', 'wb') as outfile:
+    with open(filename, 'wb') as outfile:
         pickle.dump(project, outfile)
 
     return 0
