@@ -60,6 +60,7 @@ def main(args):
         project = Project()
 
     if not hasattr(project, subcommand):
+        print('Select a subcommand of scour to run: \n' + docs)
         raise AttributeError('Invalid subcommand: {}'.format(subcommand))
     project_command = getattr(project, subcommand)
     project_command(*subargs)
