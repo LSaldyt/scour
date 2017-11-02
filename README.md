@@ -12,7 +12,7 @@ scour requires python3 as well as a google API
 ## Command line usage:
 
 ```
-lsaldyt@shiva:~/projects/personal/scour$ scour -h
+$ scour -h
 Select a subcommand of scour to run: 
     begin:
         
@@ -72,44 +72,38 @@ Select a subcommand of scour to run:
 ## Example usage:
 
 ```
-lsaldyt@shiva:~$ scour purge
+$ scour purge
 Purging all collected data
-lsaldyt@shiva:~$ scour begin thesis
+$ scour begin thesis
 Beginning the topic thesis
-lsaldyt@shiva:~$ scour show
+$ scour show
 Current topic: thesis
 {'thesis': {}}
-lsaldyt@shiva:~$ scour begin renewable-energy-generation
+$ scour begin renewable-energy-generation
 Beginning the topic renewable-energy-generation
-lsaldyt@shiva:~$ scour collect @articles "renewable energy" ~generation
+$ scour collect @articles "renewable energy" ~generation
 Collecting sources for the topic: thesis:renewable-energy-generation
-('@articles', 'renewable energy', '~generation')
-['"renewable energy"', '~generation']
-['articles']
-lsaldyt@shiva:~$ scour show
+$ scour show
 Current topic: thesis:renewable-energy-generation
 {'thesis': {'renewable-energy-generation': {'__tags__': [<Tag (thesis:renewable-energy-generation) at 2017-11-02 14:13:32.340080>]}}}
-lsaldyt@shiva:~$ scour end
+$ scour end
 Exiting the topic renewable-energy-generation
-lsaldyt@shiva:~$ scour show
+$ scour show
 Current topic: thesis
 {'thesis': {'renewable-energy-generation': {'__tags__': [<Tag (thesis:renewable-energy-generation) at 2017-11-02 14:13:32.340080>]}}}
-lsaldyt@shiva:~$ scour begin renewable-energy-storage
+$ scour begin renewable-energy-storage
 Beginning the topic renewable-energy-storage
-lsaldyt@shiva:~$ scour collect @articles "renewable energy" ~storage
+$ scour collect @articles "renewable energy" ~storage
 Collecting sources for the topic: thesis:renewable-energy-storage
-('@articles', 'renewable energy', '~storage')
-['"renewable energy"', '~storage']
-['articles']
-lsaldyt@shiva:~$ scour show
+$ scour show
 Current topic: thesis:renewable-energy-storage
 {'thesis': {'renewable-energy-generation': {'__tags__': [<Tag (thesis:renewable-energy-generation) at 2017-11-02 14:13:32.340080>]},
             'renewable-energy-storage': {'__tags__': [<Tag (thesis:renewable-energy-storage) at 2017-11-02 14:14:25.867376>]}}}
-lsaldyt@shiva:~$ scour end
+$ scour end
 Exiting the topic renewable-energy-storage
-lsaldyt@shiva:~$ scour end
+$ scour end
 Exiting the topic thesis
-lsaldyt@shiva:~$ scour review thesis
+$ scour review thesis
 Search results for: ""renewable energy" ~generation" with 16 results:
     https://en.wikipedia.org/wiki/Renewable_energy
     [...]
