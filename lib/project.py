@@ -2,6 +2,7 @@ from .collect  import collect
 from .database import Database
 
 import pickle
+import webbrowser
 
 class Project:
     def __init__(self):
@@ -93,3 +94,13 @@ class Project:
         print('Purging all collected data')
         self.database = Database()
         del self.topicChain[:]
+
+    def report(self, filename='summary.html'):
+        '''
+        Generate an HTML report, saved to [filename]
+        Arguments: [filename (str)]
+        '''
+        print('Saved a report to {}'.format(filename))
+        with open(filename, 'w') as outfile:
+            outfile.write(self.database.create_report())
+        webbrowser.open(filename)

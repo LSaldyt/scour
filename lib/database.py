@@ -55,3 +55,41 @@ class Database:
                     print(result)
             self.recursive_review(v)
 
+    def create_report(self, level=None):
+        template = '<ol>\n{}\n</ol>'
+        if level is None:
+            level = self.topictree
+
+        levelList = []
+        for k, v in level.items():
+            if isinstance(v, dict):
+                rep = self.create_report(v)
+            else:
+                tags = v
+                results = [self.universal[tag] for tag in tags]
+                rep = '\n'.join(result.as_list() for result in results)
+            levelList.append((k, rep))
+
+        return template.format(
+                    '\n'.join(
+                    '<li>{}{}</li>'.format(
+                        k if k != '__tags__' else '', rep
+                        )
+                    for k, rep in levelList
+                    )
+                )
+
+'''
+<ol>
+  <li>Chapter One
+    <ol>
+      <li>Section One</li>
+      <li>Section Two </li>
+      <li>Section Three </li>
+    </ol>
+  </li>
+  <li>Chapter Two</li>
+  <li>Chapter Three  </li>
+</ol>
+'''
+
