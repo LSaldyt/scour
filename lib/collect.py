@@ -23,9 +23,16 @@ def collect(*args, stop=10):
     '''
     Collect data focused on a particular topic
     '''
-    print(args)
+    #print(args)
     args, restrictors = separate_restrictors(args)
-    print(args)
-    print(restrictors)
+    #print(args)
+    #print(restrictors)
+    filterURLs = True
     urls = search(*args, stop=stop, restrictFiles=restrictors)
-    return Result(args, urls)
+    filtered = []
+    if filterURLs:
+        for url in urls:
+            keep = input('Keep {}?'.format(url)).lower() == 'y'
+            if keep:
+                filtered.append(url)
+    return Result(args, filtered)
